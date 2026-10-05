@@ -11,7 +11,7 @@ unmodified in `/vendor`. Everything Tukios-specific is in `tukios-consent.js`.
 Add this in the site's Head HTML, **above the Tukios GTM snippet**:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/ORG/cookies-tukios@0/tukios-consent.js" data-mode="opt-in"></script>
+<script src="https://cdn.jsdelivr.net/gh/tazheath/cookies-tukios@v0.1.0/tukios-consent.js" data-mode="opt-in"></script>
 ```
 
 - Do not add `async` or `defer`. The script has to run before GTM so Google
@@ -205,4 +205,5 @@ Run these after Reject and again after Accept.
   treated as separate sites.
 - There is no record of consent on a server.
 - The French wording should be reviewed by a French speaker before use.
-- Banner wording and the choice of mode are legal decisions.
+- Banner wording and the choice of mode are legal decisions. This tool is not
+  legal advice.
