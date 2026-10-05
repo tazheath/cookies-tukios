@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cookie consent test page</title>
+
+<style>
+  :root {
+    --page: #EEF1F0;
+    --surface: #FFFFFF;
+    --ink: #1D2A2E;
+    --muted: #5A6A6E;
+    --line: #D5DCDA;
+    --accent: #2F4A5C;
+    --on: #2E6B4F;
+    --off: #8C3B3B;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  html.theme-b body { font-family: Georgia, "Times New Roman", serif; }
+
+  main {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 48px 24px 160px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+    gap: 40px;
+    align-items: start;
+  }
+  @media (max-width: 860px) { main { grid-template-columns: 1fr; padding-top: 32px; } }
+
+  h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 38px; line-height: 1.15; margin: 0 0 12px; }
+  h2 { font-size: 18px; margin: 0 0 6px; }
+  p { margin: 0 0 14px; max-width: 60ch; }
+  .lead { color: var(--muted); margin-bottom: 32px; }
+
+  .control { border-top: 1px solid var(--line); padding: 20px 0; }
+  .control p { color: var(--muted); font-size: 15px; margin-bottom: 12px; }
+  .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+  .choices a, .choices button {
+    font: inherit; font-size: 15px;
+    padding: 8px 14px;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--accent);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .choices [aria-current="true"], .choices [aria-pressed="true"] { background: var(--accent); color: #FFFFFF; }
+  .choices a:focus-visible, .choices button:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+  aside {
+    position: sticky; top: 24px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 24px;
+  }
+  @media (max-width: 860px) { aside { position: static; } }
+  aside h2 { margin-bottom: 4px; }
+  aside > p { color: var(--muted); font-size: 15px; }
+
+  .signals { list-style: none; margin: 16px 0 20px; padding: 0; }
+  .signals li {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+    padding: 12px 0; border-top: 1px solid var(--line);
+  }
+  .signals li:last-child { border-bottom: 1px solid var(--line); }
+  .state { font-weight: 600; }
+  .state[data-on="true"] { color: var(--on); }
+  .state[data-on="false"] { color: var(--off); }
+
+  .facts { font-size: 15px; color: var(--muted); margin: 0 0 20px; }
+  .facts strong { color: var(--ink); font-weight: 600; }
+
+  #log {
+    list-style: none; margin: 0; padding: 0;
+    font-size: 14px; max-height: 240px; overflow: auto;
+  }
+  #log li { padding: 6px 0; border-top: 1px solid var(--line); color: var(--muted); }
+  #log li strong { color: var(--ink); font-weight: 600; }
+
+  /* Example of a site matching the banner to its brand. In DUDA this
+     block would live in the site's CSS. */
+  html.theme-b #stcm-wrapper {
+    --primaryColor: #7A2E3A;
+    --backgroundColor: #FBF7F2;
+    --textColor: #3A2A2A;
+    --iconColor: #7A2E3A;
+    --iconBackgroundColor: #FBF7F2;
+  }
+</style>
+
+<script>
+  // --- Test page only: read the options from the address bar. ---
+  var params = new URLSearchParams(window.location.search);
+  var demo = {
+    mode: params.get('mode') === 'opt-out' ? 'opt-out' : 'opt-in',
+    lang: params.get('lang') === 'fr' ? 'fr' : 'en',
+    geo: params.get('geo') === 'us' || params.get('geo') === 'ca' ? params.get('geo') : '',
+    theme: params.get('theme') === 'b' ? 'b' : 'a',
+    backdrop: params.get('backdrop') === 'off' ? 'off' : 'on'
+  };
+  if (demo.theme === 'b') { document.documentElement.classList.add('theme-b'); }
+
+  // --- Test page only: watch what gets sent to Google. ---
+  var signals = {};
+  var events = [];
+  window.dataLayer = [];
+  var originalPush = window.dataLayer.push.bind(window.dataLayer);
+  window.dataLayer.push = function () {
+    for (var i = 0; i < arguments.length; i++) {
+      var entry = arguments[i];
+      if (entry && entry[0] === 'consent' && entry[2]) {
+        for (var key in entry[2]) { if (key !== 'wait_for_update') { signals[key] = entry[2][key]; } }
+        events.push({ kind: entry[1], time: new Date() });
+        if (window.renderStatus) { window.renderStatus(); }
+      }
+    }
+    return originalPush.apply(null, arguments);
+  };
+
+  // --- On a real site these are data attributes on the script tag. ---
+  window.tukiosConsentConfig = {
+    mode: demo.mode,
+    lang: demo.lang,
+    geoUrl: demo.geo ? 'geo-' + demo.geo + '.json' : '',
+    backdrop: demo.backdrop === 'off' ? 'false' : 'true',
+    policyUrl: '#privacy-policy',
+    debug: true
+  };
+</script>
+
+<!-- The one line each site gets. It sits above the GTM snippet. -->
+<script src="../tukios-consent.js"></script>
+</head>
+
+<body>
+<main>
+  <section>
+    <h1>Cookie consent test page</h1>
+    <p class="lead">Use the banner the way a visitor would, then watch the panel to see what the tracking tools are told. Change a setting below to compare behaviors.</p>
+
+    <div class="control">
+      <h2>Starting behavior</h2>
+      <p>Opt-in keeps tracking off until the visitor accepts. Opt-out keeps it on until the visitor rejects.</p>
+      <div class="choices" data-param="mode">
+        <a href="#" data-value="opt-in">Opt-in</a>
+        <a href="#" data-value="opt-out">Opt-out</a>
+      </div>
+    </div>
+
+    <div class="control">
+      <h2>Visitor location</h2>
+      <p>Simulates the location lookup. It only matters in opt-out mode: a visitor in Canada is switched to opt-in.</p>
+      <div class="choices" data-param="geo">
+        <a href="#" data-value="">No lookup</a>
+        <a href="#" data-value="us">United States</a>
+        <a href="#" data-value="ca">Canada</a>
+      </div>
+    </div>
+
+    <div class="control">
+      <h2>Language</h2>
+      <p>French is built in for Quebec firms.</p>
+      <div class="choices" data-param="lang">
+        <a href="#" data-value="en">English</a>
+        <a href="#" data-value="fr">French</a>
+      </div>
+    </div>
+
+    <div class="control">
+      <h2>Site styling</h2>
+      <p>The banner picks up the site's font and can be recolored from the site's CSS. Switch themes to see it follow.</p>
+      <div class="choices" data-param="theme">
+        <a href="#" data-value="a">Theme A</a>
+        <a href="#" data-value="b">Theme B</a>
+      </div>
+    </div>
+
+    <div class="control">
+      <h2>Page blocking</h2>
+      <p>On dims the page and holds it until the visitor chooses. Off lets them keep browsing with the banner in the corner.</p>
+      <div class="choices" data-param="backdrop">
+        <a href="#" data-value="on">On</a>
+        <a href="#" data-value="off">Off</a>
+      </div>
+    </div>
+
+    <div class="control">
+      <h2>Start over</h2>
+      <p>Clears the saved choice so the banner appears again, as it would for a new visitor.</p>
+      <div class="choices">
+        <button type="button" id="reset">Clear saved choice</button>
+        <a href="#cookie-settings">Open cookie settings</a>
+      </div>
+    </div>
+  </section>
+
+  <aside aria-live="polite">
+    <h2>What the tracking tools are told</h2>
+    <p>Updates the moment a choice is made.</p>
+    <ul class="signals">
+      <li><span>Google Analytics</span><span class="state" id="s-analytics"></span></li>
+      <li><span>Google Ads</span><span class="state" id="s-ads"></span></li>
+      <li><span>Facebook pixel</span><span class="state" id="s-facebook"></span></li>
+    </ul>
+    <p class="facts">
+      Behavior in effect: <strong id="f-mode"></strong><br>
+      Browser privacy signal: <strong id="f-gpc"></strong>
+    </p>
+    <h2>Messages sent to Google</h2>
+    <ul id="log"></ul>
+  </aside>
+</main>
+
+<script>
+  function setState(id, on, onLabel, offLabel) {
+    var el = document.getElementById(id);
+    el.textContent = on ? onLabel : offLabel;
+    el.setAttribute('data-on', on ? 'true' : 'false');
+  }
+
+  window.renderStatus = function () {
+    if (!document.getElementById('log')) { return; }
+    setState('s-analytics', signals.analytics_storage === 'granted', 'Allowed', 'Blocked');
+    setState('s-ads', signals.ad_storage === 'granted', 'Allowed', 'Blocked');
+    setState('s-facebook', signals.ad_storage === 'granted', 'Allowed', 'Blocked');
+
+    var mode = window.tukiosConsent ? window.tukiosConsent.getMode() : demo.mode;
+    document.getElementById('f-mode').textContent = mode === 'opt-out' ? 'Opt-out' : 'Opt-in';
+    document.getElementById('f-gpc').textContent =
+      navigator.globalPrivacyControl === true ? 'Detected' : 'Not detected';
+
+    var log = document.getElementById('log');
+    log.innerHTML = '';
+    events.slice().reverse().forEach(function (event) {
+      var item = document.createElement('li');
+      var label = document.createElement('strong');
+      label.textContent = event.kind === 'default' ? 'Starting state' : 'Update';
+      item.appendChild(label);
+      item.appendChild(document.createTextNode(' at ' + event.time.toLocaleTimeString()));
+      log.appendChild(item);
+    });
+  };
+
+  // Option links reload the page with the new setting.
+  document.querySelectorAll('.choices[data-param]').forEach(function (group) {
+    var param = group.getAttribute('data-param');
+    group.querySelectorAll('a').forEach(function (link) {
+      var value = link.getAttribute('data-value');
+      var next = new URLSearchParams(window.location.search);
+      if (value) { next.set(param, value); } else { next.delete(param); }
+      link.href = '?' + next.toString();
+      if (String(demo[param]) === value) { link.setAttribute('aria-current', 'true'); }
+      link.addEventListener('click', function () {
+        try { sessionStorage.removeItem('tukiosConsent.country'); } catch (e) {}
+      });
+    });
+  });
+
+  document.getElementById('reset').addEventListener('click', function () {
+    try { sessionStorage.removeItem('tukiosConsent.country'); } catch (e) {}
+    if (window.tukiosConsent) { window.tukiosConsent.reset(); }
+  });
+
+  window.renderStatus();
+</script>
+</body>
+</html>
