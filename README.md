@@ -11,14 +11,13 @@ unmodified in `/vendor`. Everything Tukios-specific is in `tukios-consent.js`.
 Add this in the site's Head HTML, **above the Tukios GTM snippet**:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/tazheath/cookies-tukios@v0.1.0/tukios-consent.js" data-mode="opt-in"></script>
+<script src="https://cdn.jsdelivr.net/gh/tazheath/cookies-tukios@v0.1.1/tukios-consent.js" data-mode="opt-in"></script>
 ```
 
 - Do not add `async` or `defer`. The script has to run before GTM so Google
   sees the starting state first.
-- Replace `ORG` with the GitHub account that owns the repo.
 - `@0` follows the latest `0.x` release. While testing, pin an exact tag such
-  as `@v0.1.0` so a cached copy is never served.
+  as `@v0.1.1` so a cached copy is never served.
 
 ## Options
 
