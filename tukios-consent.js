@@ -1,5 +1,5 @@
 /*!
- * Tukios Consent Loader v0.1.0
+ * Tukios Consent Loader v0.1.1
  * Wraps the Silktide Consent Manager v2.0.1 (MIT, unmodified, in /vendor).
  * Install in the site <head>, above the GTM snippet, without async or defer.
  * Options are documented in README.md.
@@ -10,7 +10,7 @@
   // Never run twice on one page.
   if (window.tukiosConsent && window.tukiosConsent.version) { return; }
 
-  var VERSION = '0.1.0';
+  var VERSION = '0.1.1';
 
   // 1. Options. window.tukiosConsentConfig overrides the data attributes.
   var script = document.currentScript ||
@@ -41,7 +41,8 @@
   // A missing or misspelled mode falls back to opt-in, the stricter one.
   var siteMode = option('mode', 'opt-in') === 'opt-out' ? 'opt-out' : 'opt-in';
   var lang = String(option('lang', 'en')).toLowerCase().slice(0, 2) === 'fr' ? 'fr' : 'en';
-  var policyUrl = option('policyUrl', '');
+  var policyUrl = option('policyUrl', '/privacy-policy');
+  if (policyUrl === 'none') { policyUrl = ''; }
   var fbPixelId = String(option('fbPixel', '')).replace(/[^0-9]/g, '');
   var geoUrl = option('geoUrl', '');
 
@@ -195,7 +196,9 @@
         '--backdropBackgroundColor:#00000033;' +
         '--backdropBackgroundBlur:0px;' +
       '}' +
-      '#stcm-wrapper button{font-family:inherit;}';
+      '#stcm-wrapper button{font-family:inherit;}' +
+      '#stcm-wrapper #stcm-icon{width:48px;height:48px;}' +
+      '#stcm-wrapper #stcm-icon svg{width:30px;height:30px;}';
 
     if (option('credit', 'hide') === 'hide') {
       css += '#stcm-wrapper .stcm-logo,#stcm-wrapper .stcm-credit-link{display:none !important;}';
@@ -332,7 +335,7 @@
       debug: debug,
       backdrop: { show: option('backdrop', 'true') !== 'false' && option('backdrop', 'true') !== false },
       prompt: { position: option('position', 'bottomRight') },
-      icon: { position: option('iconPosition', 'bottomLeft') },
+      icon: { position: option('iconPosition', 'bottomRight') },
       onPreferencesOpen: translateToggles,
       consentTypes: [
         {

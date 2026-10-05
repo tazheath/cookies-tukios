@@ -1,4 +1,4 @@
-# Cookies Tukios - Consent
+# Cookies Tukios -Consent
 
 One script tag that adds a cookie consent banner to a site and connects the
 visitor's choice to Google (Analytics and Ads) and the Facebook pixel.
@@ -28,11 +28,11 @@ Set these as attributes on the script tag.
 | --- | --- | --- | --- |
 | `data-mode` | `opt-in`, `opt-out` | `opt-in` | Starting behavior before the visitor chooses |
 | `data-lang` | `en`, `fr` | `en` | Banner language |
-| `data-policy-url` | a URL | none | Adds a Privacy Policy link to the banner |
+| `data-policy-url` | a URL, or `none` | `/privacy-policy` | Privacy Policy link in the banner. `none` hides it |
 | `data-fb-pixel` | a pixel ID | none | Loads the Facebook pixel only when marketing is allowed |
 | `data-backdrop` | `true`, `false` | `true` | Dims and holds the page until the visitor chooses |
 | `data-position` | `bottomRight`, `bottomLeft`, `bottomCenter`, `center` | `bottomRight` | Banner position |
-| `data-icon-position` | `bottomLeft`, `bottomRight` | `bottomLeft` | Position of the reopen icon |
+| `data-icon-position` | `bottomLeft`, `bottomRight` | `bottomRight` | Position of the reopen icon |
 | `data-primary-color` | a CSS color | `#2F4A5C` | Buttons, links, icon |
 | `data-background-color` | a CSS color | `#FFFFFF` | Banner background |
 | `data-text-color` | a CSS color | `#2B2B2B` | Banner text |
@@ -71,6 +71,14 @@ in the site's own CSS wins. To match a site's brand, add this to the site CSS:
 Anything not covered by a variable can be targeted directly, for example
 `#stcm-wrapper .stcm-button { border-radius: 0; }`.
 
+The reopen icon is 48px by default. To resize it, set both the circle and the
+graphic inside it:
+
+```css
+#stcm-wrapper #stcm-icon { width: 60px; height: 60px; }
+#stcm-wrapper #stcm-icon svg { width: 38px; height: 38px; }
+```
+
 ## Cookie settings link
 
 Any link to `#cookie-settings` reopens the preferences. Add one to the footer:
@@ -101,7 +109,7 @@ site's HTML.
 
 ## For the manage2 handoff
 
-Two seams are already built in.
+Two seams are already built in, and one piece has to be added on the platform.
 
 **1. Settings from manage2.** Define this object before the script tag and it
 overrides the attributes. Keys are the attribute names in camelCase.
@@ -135,6 +143,17 @@ visitor's location as JSON:
 
 On AWS, CloudFront can attach the viewer's country and region to each request,
 so the endpoint may only need to echo those headers.
+
+**3. Obituary pages.** Obituaries are served by the Tukios obituary platform,
+not DUDA, so the DUDA Head HTML does not reach them. Tested on a live site:
+the script does not load on an individual obituary page.
+
+- Add the same script tag to the obituary platform's page head, above its GTM
+  snippets, with the same options the firm's DUDA site uses.
+- The saved choice is shared as long as both sides use the same hostname.
+- Those pages send a Content Security Policy in report-only mode. If it is
+  ever enforced, allow the script's host, its stylesheet, and the inline style
+  block the loader adds.
 
 ## Script API
 
@@ -176,7 +195,8 @@ Run these after Reject and again after Accept.
    granted. Requests still appear when denied; judge by the `gcs` value.
 3. **Cookies:** in a fresh browser profile, no `_ga`, `_gcl_au` or `_fbp` after
    Reject.
-4. **Obituary pages:** the choice made on the DUDA site carries over.
+4. **Obituary pages:** once the script is on the obituary platform, the choice
+   made on the DUDA site carries over.
 5. **DUDA editor and preview:** confirm the banner does not get in the way.
 
 ## Known limits
@@ -185,5 +205,4 @@ Run these after Reject and again after Accept.
   treated as separate sites.
 - There is no record of consent on a server.
 - The French wording should be reviewed by a French speaker before use.
-- Banner wording and the choice of mode are legal decisions. This tool is not
-  legal advice.
+- Banner wording and the choice of mode are legal decisions.
