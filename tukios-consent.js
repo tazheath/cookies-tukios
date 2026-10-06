@@ -1,5 +1,5 @@
 /*!
- * Tukios Consent Loader v0.1.1
+ * Tukios Consent Loader v0.1.2
  * Wraps the Silktide Consent Manager v2.0.1 (MIT, unmodified, in /vendor).
  * Install in the site <head>, above the GTM snippet, without async or defer.
  * Options are documented in README.md.
@@ -10,7 +10,7 @@
   // Never run twice on one page.
   if (window.tukiosConsent && window.tukiosConsent.version) { return; }
 
-  var VERSION = '0.1.1';
+  var VERSION = '0.1.2';
 
   // 1. Options. window.tukiosConsentConfig overrides the data attributes.
   var script = document.currentScript ||
@@ -203,6 +203,10 @@
     if (option('credit', 'hide') === 'hide') {
       css += '#stcm-wrapper .stcm-logo,#stcm-wrapper .stcm-credit-link{display:none !important;}';
     }
+
+    if (!isOn(option('showIcon', false))) {
+      css += '#stcm-wrapper #stcm-icon{display:none !important;}';
+  }
 
     var link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -446,7 +450,7 @@
 
   document.addEventListener('click', function (event) {
     var target = event.target && event.target.closest
-      ? event.target.closest('a[href$="#cookie-settings"],[data-tukios-consent="open"]')
+      ? event.target.closest('a[href$="#cookie-settings"],a[href$="#cookies-settings"],[data-tukios-consent="open"]')
       : null;
     if (!target) { return; }
     event.preventDefault();

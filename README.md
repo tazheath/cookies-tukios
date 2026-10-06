@@ -11,7 +11,7 @@ unmodified in `/vendor`. Everything Tukios-specific is in `tukios-consent.js`.
 Add this in the site's Head HTML, **above the Tukios GTM snippet**:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/tazheath/cookies-tukios@v0.1.1/tukios-consent.js" data-mode="opt-in"></script>
+<script src="https://cdn.jsdelivr.net/gh/tazheath/cookies-tukios@v0.1.2/tukios-consent.js" data-mode="opt-in"></script>
 ```
 
 - Do not add `async` or `defer`. The script has to run before GTM so Google
@@ -30,6 +30,7 @@ Set these as attributes on the script tag.
 | `data-policy-url` | a URL, or `none` | `/privacy-policy` | Privacy Policy link in the banner. `none` hides it |
 | `data-fb-pixel` | a pixel ID | none | Loads the Facebook pixel only when marketing is allowed |
 | `data-backdrop` | `true`, `false` | `true` | Dims and holds the page until the visitor chooses |
+| `data-show-icon` | `true`, `false` | `false` | Shows the floating reopen icon. Leave off when the footer has a Cookie settings link |
 | `data-position` | `bottomRight`, `bottomLeft`, `bottomCenter`, `center` | `bottomRight` | Banner position |
 | `data-icon-position` | `bottomLeft`, `bottomRight` | `bottomRight` | Position of the reopen icon |
 | `data-primary-color` | a CSS color | `#2F4A5C` | Buttons, links, icon |
