@@ -239,11 +239,11 @@
         },
         marketing: {
           label: 'Marketing',
-          description: '<p>These cookies are used by us and our advertising partners to show you relevant ads on this site and elsewhere, and to measure how those campaigns perform.</p>'
+          description: '<p>These cookies are used by us and advertising partners such as Google and Meta (Facebook) to show you relevant ads on this site and elsewhere, and to measure how those campaigns perform.</p>'
         }
       },
       prompt: {
-        description: 'We use cookies on our site to improve your experience and to understand how the site is used.',
+        description: 'We use cookies on our site to improve your experience and to understand how the site is used. Some third-party tools, like chat or reviews, may set their own cookies.',
         acceptAllButtonText: 'Accept all',
         acceptAllButtonAccessibleLabel: 'Accept all cookies',
         rejectNonEssentialButtonText: 'Reject non-essential',
@@ -253,7 +253,7 @@
       },
       preferences: {
         title: 'Customize your cookie preferences',
-        description: 'We respect your right to privacy. You can choose not to allow some types of cookies. Your choices apply across our website.',
+        description: 'We respect your right to privacy. You can choose not to allow some types of cookies. Your choices apply across our website. Some features from third-party providers, such as chat or review tools, may set their own cookies and are not controlled by these settings.',
         saveButtonText: 'Save and close',
         saveButtonAccessibleLabel: 'Save your cookie preferences',
         creditLinkText: 'Get this banner for free',
@@ -275,11 +275,11 @@
         },
         marketing: {
           label: 'Marketing',
-          description: '<p>Ces témoins sont utilisés par nous et par nos partenaires publicitaires pour vous présenter des publicités pertinentes, sur ce site et ailleurs, et pour mesurer le rendement de ces campagnes.</p>'
+          description: '<p>Ces témoins sont utilisés par nous et par nos partenaires publicitaires, comme Google et Meta (Facebook), pour vous présenter des publicités pertinentes, sur ce site et ailleurs, et pour mesurer le rendement de ces campagnes.</p>'
         }
       },
       prompt: {
-        description: 'Nous utilisons des témoins (cookies) pour améliorer votre expérience et comprendre comment le site est utilisé.',
+        description: 'Nous utilisons des témoins (cookies) pour améliorer votre expérience et comprendre comment le site est utilisé. Certains outils de tiers, comme le clavardage ou les avis, peuvent déposer leurs propres témoins.',
         acceptAllButtonText: 'Tout accepter',
         acceptAllButtonAccessibleLabel: 'Accepter tous les témoins',
         rejectNonEssentialButtonText: 'Refuser les non essentiels',
@@ -289,7 +289,7 @@
       },
       preferences: {
         title: 'Personnalisez vos préférences de témoins',
-        description: 'Nous respectons votre droit à la vie privée. Vous pouvez refuser certains types de témoins. Vos choix s’appliquent à l’ensemble de notre site.',
+        description: 'Nous respectons votre droit à la vie privée. Vous pouvez refuser certains types de témoins. Vos choix s’appliquent à l’ensemble de notre site. Certaines fonctions offertes par des tiers, comme le clavardage ou les avis, peuvent déposer leurs propres témoins et ne sont pas contrôlées par ces paramètres.',
         saveButtonText: 'Enregistrer et fermer',
         saveButtonAccessibleLabel: 'Enregistrer vos préférences de témoins',
         creditLinkText: 'Obtenez cette bannière gratuitement',
